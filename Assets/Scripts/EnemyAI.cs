@@ -38,11 +38,10 @@ public class EnemyAI : MonoBehaviour
         enemyRenderer = GetComponent<Renderer>();
         if (enemyRenderer == null)
         {
-            Debug.LogError("No enemy!");
+            Debug.LogError("No enemy renderer found!");
         }
 
         SetColor(patrolColor);
-
         SetRandomPatrolPoint();
     }
 
@@ -53,6 +52,12 @@ public class EnemyAI : MonoBehaviour
         if (isChasing)
         {
             ChasePlayer();
+            if (!IsPlayerInRange())
+            {
+                isChasing = false;
+                SetColor(patrolColor);
+                SetRandomPatrolPoint();
+            }
         }
         else
         {
@@ -83,16 +88,9 @@ public class EnemyAI : MonoBehaviour
         patrolPoint = randomDirection;
     }
 
-    // Chase the player
     void ChasePlayer()
     {
         MoveToPoint(player.position);
-
-        if (!CanSeePlayer())
-        {
-            isChasing = false;
-            SetColor(patrolColor);
-        }
     }
 
     void MoveToPoint(Vector3 targetPoint)
@@ -131,6 +129,14 @@ public class EnemyAI : MonoBehaviour
         }
 
         return false;
+    }
+
+    bool IsPlayerInRange()
+    {
+        if (player == null) return false;
+
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        return distanceToPlayer <= sightRange;
     }
 
     void SetColor(Color newColor)
