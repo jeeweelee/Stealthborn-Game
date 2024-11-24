@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro; // Import TextMeshPro namespace
+using TMPro;
 
 public class ShadowDetection : MonoBehaviour
 {
-    public Light directionalLight; 
+    public Light directionalLight;
     public TextMeshProUGUI shadowText; 
+    public bool isInShadow = false; 
 
     private void Start()
     {
@@ -41,11 +42,13 @@ public class ShadowDetection : MonoBehaviour
         {
             if (hit.collider != null && hit.collider.gameObject != this.gameObject)
             {
-                shadowText.text = "In Shadow";
+                isInShadow = true;
+                shadowText.text = "In Shadow"; 
                 return;
             }
         }
 
+        isInShadow = false;
         shadowText.text = "Not In Shadow";
     }
 }
