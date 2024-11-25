@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private int score;
 
-    // Start is called before the first frame update
     private void Start()
     {
-
+        score = 0;
     }
 
     // Update is called once per frame
     private void Update()
     {
-
+        
 
     }
 
@@ -22,7 +22,12 @@ public class PlayerController : MonoBehaviour
     {
         if (collider.CompareTag("Crystal")) 
         {
+            score++;
             Destroy(collider.gameObject); 
         }
+    }
+    public int getScore()
+    {
+        return score;
     }
 }

@@ -5,9 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - CinemachineTarget
-  - Ground
   - Crystal
   - Enemy
+  - Door
   layers:
   - Default
   - TransparentFX
