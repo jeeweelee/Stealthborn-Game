@@ -5,9 +5,13 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private int score;
+    private AudioSource audioSource;
+    public AudioClip CrystalSFX;
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
         score = 0;
     }
 
@@ -21,10 +25,13 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerEnter(Collider collider)
     {
         if (collider.CompareTag("Crystal")) 
-        {
+        {   
             score++;
-            Destroy(collider.gameObject); 
+            Destroy(collider.gameObject);
+            audioSource.PlayOneShot(CrystalSFX);
         }
+
+        
     }
     public int getScore()
     {
