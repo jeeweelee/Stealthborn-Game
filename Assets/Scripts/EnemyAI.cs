@@ -1,25 +1,38 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
-    public float moveSpeed = 3f;
-    public float patrolRadius = 10f;
     public float sightRange = 8f;
     public float sightAngle = 45f;
-    public float rotationSpeed = 5f;
     public string playerTag = "Player";
     public LayerMask obstaclesLayer;
     public Color patrolColor = Color.blue;
     public Color chaseColor = Color.red;
+    public float patrolInterval = 5f; // Time in seconds between choosing new random points
 
     private Transform player;
-    private Vector3 patrolPoint;
+    private NavMeshAgent agent;
     private bool isChasing = false;
     private Renderer enemyRenderer;
     private ShadowDetection shadowDetection;
+    private Light spotlight;
+    private float patrolTimer;
+    private Animator animator;
 
     void Start()
     {
+        // Initialize NavMeshAgent
+        agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+
+        if (agent == null)
+        {
+            Debug.LogError("No NavMeshAgent component found on this GameObject!");
+            return;
+        }
+
+        // Find player
         GameObject playerObject = GameObject.FindGameObjectWithTag(playerTag);
         if (playerObject != null)
         {
@@ -32,78 +45,81 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Player object with tag '" + playerTag + "' not found!");
+            Debug.LogError($"Player object with tag '{playerTag}' not found!");
         }
 
+        // Initialize Renderer
         enemyRenderer = GetComponent<Renderer>();
         if (enemyRenderer == null)
         {
-            Debug.LogError("No enemy renderer found!");
+            Debug.LogError("No Renderer found!");
+        }
+
+        spotlight = GetComponentInChildren<Light>();
+        if (spotlight == null)
+        {
+            Debug.LogError("No spotlight found as a child of the enemy!");
         }
 
         SetColor(patrolColor);
-        SetRandomPatrolPoint();
+        MoveToRandomNavMeshPoint();
     }
 
     void Update()
     {
         if (player == null) return;
 
+        patrolTimer += Time.deltaTime;
+
         if (isChasing)
         {
             ChasePlayer();
-            if (!IsPlayerInRange())
+            if (!CanSeePlayer())
             {
                 isChasing = false;
                 SetColor(patrolColor);
-                SetRandomPatrolPoint();
+                animator.SetBool("PlayerSpotted", false);
+                MoveToRandomNavMeshPoint();
             }
         }
         else
         {
-            Patrol();
+            // Choose a new random position every patrolInterval seconds
+            if (patrolTimer >= patrolInterval)
+            {
+                MoveToRandomNavMeshPoint();
+                patrolTimer = 0f; // Reset the timer
+            }
+
             if (CanSeePlayer())
             {
                 isChasing = true;
                 SetColor(chaseColor);
+                animator.SetBool("PlayerSpotted", true);
             }
         }
     }
 
-    void Patrol()
+    /// <summary>
+    /// Moves to a random point on the NavMesh.
+    /// </summary>
+    void MoveToRandomNavMeshPoint()
     {
-        MoveToPoint(patrolPoint);
-
-        if (Vector3.Distance(transform.position, patrolPoint) < 1f)
-        {
-            SetRandomPatrolPoint();
-        }
-    }
-
-    void SetRandomPatrolPoint()
-    {
-        Vector3 randomDirection = Random.insideUnitSphere * patrolRadius;
+        Vector3 randomDirection = Random.insideUnitSphere * 100f; // Large search area
         randomDirection += transform.position;
-        randomDirection.y = transform.position.y;
-        patrolPoint = randomDirection;
+
+        if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, 100f, NavMesh.AllAreas))
+        {
+            agent.SetDestination(hit.position);
+        }
     }
 
     void ChasePlayer()
     {
-        MoveToPoint(player.position);
-    }
-
-    void MoveToPoint(Vector3 targetPoint)
-    {
-        Vector3 direction = (targetPoint - transform.position).normalized;
-
-        if (direction != Vector3.zero)
+        if (player != null)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            agent.SetDestination(player.position);
         }
-
-        transform.position += transform.forward * moveSpeed * Time.deltaTime;
     }
 
     bool CanSeePlayer()
@@ -136,6 +152,11 @@ public class EnemyAI : MonoBehaviour
         if (player == null) return false;
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        if(distanceToPlayer <= sightRange && distanceToPlayer <= 5f)
+        {
+            animator.SetBool("CloseToPlayer", true);
+        } else if (distanceToPlayer <= sightRange)
+            animator.SetBool("CloseToPlayer", false);
         return distanceToPlayer <= sightRange;
     }
 

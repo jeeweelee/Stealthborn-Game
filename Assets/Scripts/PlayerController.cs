@@ -29,6 +29,9 @@ public class PlayerController : MonoBehaviour
             score++;
             Destroy(collider.gameObject);
             audioSource.PlayOneShot(CrystalSFX);
+        } else if (collider.CompareTag("Enemy"))
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("LoseScreen");
         }
 
         
