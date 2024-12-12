@@ -6,7 +6,7 @@ using TMPro;
 public class ShadowDetection : MonoBehaviour
 {
     public Light directionalLight;
-    public TextMeshProUGUI shadowText; 
+    public TMP_Text shadowText; 
     public bool isInShadow = false; 
 
     private void Start()
