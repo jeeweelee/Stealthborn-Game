@@ -449,7 +449,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000000094064, y: -94}
+  m_AnchoredPosition: {x: 0, y: -94}
   m_SizeDelta: {x: 1024, y: 52.7151}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &483241516
@@ -991,7 +991,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0.000000094064, y: 71.69055}
+  m_AnchoredPosition: {x: 0, y: 71.69055}
   m_SizeDelta: {x: 1024, y: 143.385}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1784665306
@@ -1103,7 +1103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f733f2e915ab654c9da8cbf3685842f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextScene: SampleScene
+  nextScene: MainMenu
   subtitleText: {fileID: 183312662}
   isWinningScreen: 1
   isLosingScreen: 0

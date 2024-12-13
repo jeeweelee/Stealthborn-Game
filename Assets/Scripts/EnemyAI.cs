@@ -10,6 +10,9 @@ public class EnemyAI : MonoBehaviour
     public Color patrolColor = Color.blue;
     public Color chaseColor = Color.red;
     public float patrolInterval = 5f; // Time in seconds between choosing new random points
+    private AudioSource audioSource;
+    public AudioClip ScreamSFX;
+    private AudioClip currentSFX;
 
     private Transform player;
     private NavMeshAgent agent;
@@ -25,6 +28,8 @@ public class EnemyAI : MonoBehaviour
         // Initialize NavMeshAgent
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
+        currentSFX = audioSource.clip;
 
         if (agent == null)
         {
@@ -77,6 +82,8 @@ public class EnemyAI : MonoBehaviour
             if (!CanSeePlayer())
             {
                 isChasing = false;
+                audioSource.volume = 0.5f;
+                audioSource.clip = currentSFX;
                 SetColor(patrolColor);
                 animator.SetBool("PlayerSpotted", false);
                 MoveToRandomNavMeshPoint();
@@ -84,15 +91,19 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
-            // Choose a new random position every patrolInterval seconds
             if (patrolTimer >= patrolInterval)
             {
                 MoveToRandomNavMeshPoint();
-                patrolTimer = 0f; // Reset the timer
+                patrolTimer = 0f;
             }
 
             if (CanSeePlayer())
             {
+                audioSource.volume = 1f;
+                //audioSource.PlayOneShot(ScreamSFX);
+                audioSource.Stop();
+                audioSource.clip = ScreamSFX;
+                audioSource.Play();
                 isChasing = true;
                 SetColor(chaseColor);
                 animator.SetBool("PlayerSpotted", true);
@@ -138,7 +149,7 @@ public class EnemyAI : MonoBehaviour
                 {
                     if (!shadowDetection.isInShadow)
                     {
-                        if (distanceToPlayer <= sightRange && distanceToPlayer <= 4.5f)
+                        if (distanceToPlayer <= sightRange && distanceToPlayer <= 3.5f)
                         {
                             animator.SetBool("CloseToPlayer", true);
                         }

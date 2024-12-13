@@ -33,13 +33,17 @@ public class PlayerController : MonoBehaviour
             Destroy(collider.gameObject);
             audioSource.PlayOneShot(CrystalSFX);
             if (collectedAllCrystals())
-                objectiveText.text = "Objective: Find the door and exit";
+                objectiveText.text = "Objective: Enter the church and exit";
         } else if (collider.CompareTag("Enemy"))
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("LoseScreen");
+            Die();
         }
 
         
+    }
+    public void Die()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("LoseScreen");
     }
     public bool collectedAllCrystals()
     {
