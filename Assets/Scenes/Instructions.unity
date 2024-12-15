@@ -1238,13 +1238,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1784665304}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f733f2e915ab654c9da8cbf3685842f, type: 3}
+  m_Script: {fileID: 11500000, guid: 871cbb09766adde42b005df0e9f12101, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextScene: Level 1
-  subtitleText: {fileID: 0}
-  isWinningScreen: 0
-  isLosingScreen: 0
 --- !u!1 &1855556343
 GameObject:
   m_ObjectHideFlags: 0

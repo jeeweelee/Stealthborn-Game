@@ -10,6 +10,7 @@ public class DoorController : MonoBehaviour
     {
         if (collision.CompareTag("Player") && player.GetComponent<PlayerController>().collectedAllCrystals())
         {
+            Debug.Log("You touched this door");
             UnityEngine.SceneManagement.SceneManager.LoadScene(nextSceneName);
         }
     }

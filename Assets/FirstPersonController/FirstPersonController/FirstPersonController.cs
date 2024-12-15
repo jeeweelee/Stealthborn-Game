@@ -221,6 +221,11 @@ public class FirstPersonController : MonoBehaviour
             pitch = Mathf.Clamp(pitch, -maxLookAngle, maxLookAngle);
 
             transform.localEulerAngles = new Vector3(0, yaw, 0);
+            if (playerCamera == null)
+            {
+                Debug.LogError("Player Camera is not assigned in the Inspector!");
+                return; // Stop further execution to avoid errors
+            }
             playerCamera.transform.localEulerAngles = new Vector3(pitch, 0, 0);
         }
 
