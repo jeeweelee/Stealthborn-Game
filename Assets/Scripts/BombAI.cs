@@ -4,7 +4,7 @@ using UnityEngine;
 public class BombAI : MonoBehaviour
 {
     public string playerTag = "Player";
-    public float sightRange = 10f;
+    private float sightRange = 13f;
     private float delayBeforeDie = 1.75f;
     private Animator animator;
     private Transform player;

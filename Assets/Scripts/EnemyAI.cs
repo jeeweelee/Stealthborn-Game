@@ -149,7 +149,7 @@ public class EnemyAI : MonoBehaviour
                 {
                     if (!shadowDetection.isInShadow)
                     {
-                        if (distanceToPlayer <= sightRange && distanceToPlayer <= 3.5f)
+                        if (distanceToPlayer <= sightRange && distanceToPlayer <= 5f)
                         {
                             animator.SetBool("CloseToPlayer", true);
                         }
